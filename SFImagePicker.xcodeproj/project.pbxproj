@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3226D696169C4440002DCDD0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3226D695169C4440002DCDD0 /* QuartzCore.framework */; };
+		3226D69B169C637A002DCDD0 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D699169C637A002DCDD0 /* Overlay.png */; };
+		3226D69C169C637A002DCDD0 /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D69A169C637A002DCDD0 /* Overlay@2x.png */; };
+		3226D69F169C63ED002DCDD0 /* SFAssetTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3226D69E169C63ED002DCDD0 /* SFAssetTableCell.m */; };
 		32CF9318169B725C0095AD4A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CF9317169B725C0095AD4A /* UIKit.framework */; };
 		32CF931A169B725C0095AD4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CF9319169B725C0095AD4A /* Foundation.framework */; };
 		32CF931C169B725C0095AD4A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CF931B169B725C0095AD4A /* CoreGraphics.framework */; };
@@ -19,9 +23,19 @@
 		32CF9331169B725C0095AD4A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CF932F169B725C0095AD4A /* MainStoryboard_iPhone.storyboard */; };
 		32CF9334169B725C0095AD4A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CF9332169B725C0095AD4A /* MainStoryboard_iPad.storyboard */; };
 		32CF9337169B725C0095AD4A /* SFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF9336169B725C0095AD4A /* SFViewController.m */; };
+		32CF9340169B72DB0095AD4A /* SFImagePickerControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */; };
+		32CF9343169B731B0095AD4A /* SFViewControllerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF9342169B731B0095AD4A /* SFViewControllerModel.m */; };
+		32CF9345169B734E0095AD4A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CF9344169B734E0095AD4A /* AssetsLibrary.framework */; };
+		32CF934D169B79090095AD4A /* SFGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF934C169B79090095AD4A /* SFGroupTableViewController.m */; };
+		32CF9351169BA0CD0095AD4A /* SFAssetTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF9350169BA0CD0095AD4A /* SFAssetTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3226D695169C4440002DCDD0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		3226D699169C637A002DCDD0 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Overlay.png; path = ImagePickerController/Overlay.png; sourceTree = "<group>"; };
+		3226D69A169C637A002DCDD0 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Overlay@2x.png"; path = "ImagePickerController/Overlay@2x.png"; sourceTree = "<group>"; };
+		3226D69D169C63ED002DCDD0 /* SFAssetTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFAssetTableCell.h; path = ImagePickerController/SFAssetTableCell.h; sourceTree = "<group>"; };
+		3226D69E169C63ED002DCDD0 /* SFAssetTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFAssetTableCell.m; path = ImagePickerController/SFAssetTableCell.m; sourceTree = "<group>"; };
 		32CF9313169B725C0095AD4A /* SFImagePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SFImagePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32CF9317169B725C0095AD4A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		32CF9319169B725C0095AD4A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -39,6 +53,16 @@
 		32CF9333169B725C0095AD4A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		32CF9335169B725C0095AD4A /* SFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SFViewController.h; sourceTree = "<group>"; };
 		32CF9336169B725C0095AD4A /* SFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SFViewController.m; sourceTree = "<group>"; };
+		32CF933E169B72DB0095AD4A /* SFImagePickerControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFImagePickerControllerViewController.h; path = ImagePickerController/SFImagePickerControllerViewController.h; sourceTree = "<group>"; };
+		32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFImagePickerControllerViewController.m; path = ImagePickerController/SFImagePickerControllerViewController.m; sourceTree = "<group>"; };
+		32CF9341169B731A0095AD4A /* SFViewControllerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFViewControllerModel.h; path = ImagePickerController/SFViewControllerModel.h; sourceTree = "<group>"; };
+		32CF9342169B731B0095AD4A /* SFViewControllerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFViewControllerModel.m; path = ImagePickerController/SFViewControllerModel.m; sourceTree = "<group>"; };
+		32CF9344169B734E0095AD4A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		32CF934B169B79090095AD4A /* SFGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFGroupTableViewController.h; path = ImagePickerController/SFGroupTableViewController.h; sourceTree = "<group>"; };
+		32CF934C169B79090095AD4A /* SFGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFGroupTableViewController.m; path = ImagePickerController/SFGroupTableViewController.m; sourceTree = "<group>"; };
+		32CF934E169B96850095AD4A /* SFAssetsControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SFAssetsControllerDelegate.h; path = ImagePickerController/SFAssetsControllerDelegate.h; sourceTree = "<group>"; };
+		32CF934F169BA0CD0095AD4A /* SFAssetTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFAssetTableViewController.h; path = ImagePickerController/SFAssetTableViewController.h; sourceTree = "<group>"; };
+		32CF9350169BA0CD0095AD4A /* SFAssetTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFAssetTableViewController.m; path = ImagePickerController/SFAssetTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3226D696169C4440002DCDD0 /* QuartzCore.framework in Frameworks */,
+				32CF9345169B734E0095AD4A /* AssetsLibrary.framework in Frameworks */,
 				32CF9318169B725C0095AD4A /* UIKit.framework in Frameworks */,
 				32CF931A169B725C0095AD4A /* Foundation.framework in Frameworks */,
 				32CF931C169B725C0095AD4A /* CoreGraphics.framework in Frameworks */,
@@ -55,10 +81,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3226D698169C6364002DCDD0 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				3226D699169C637A002DCDD0 /* Overlay.png */,
+				3226D69A169C637A002DCDD0 /* Overlay@2x.png */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		32CF9308169B725B0095AD4A = {
 			isa = PBXGroup;
 			children = (
-				32CF931D169B725C0095AD4A /* SFImagePicker */,
+				3226D695169C4440002DCDD0 /* QuartzCore.framework */,
+				32CF9344169B734E0095AD4A /* AssetsLibrary.framework */,
+				32CF931D169B725C0095AD4A /* Classes */,
 				32CF9316169B725C0095AD4A /* Frameworks */,
 				32CF9314169B725C0095AD4A /* Products */,
 			);
@@ -82,9 +119,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		32CF931D169B725C0095AD4A /* SFImagePicker */ = {
+		32CF931D169B725C0095AD4A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				32CF933D169B72690095AD4A /* Image Picker Controller */,
 				32CF9326169B725C0095AD4A /* SFAppDelegate.h */,
 				32CF9327169B725C0095AD4A /* SFAppDelegate.m */,
 				32CF932F169B725C0095AD4A /* MainStoryboard_iPhone.storyboard */,
@@ -93,6 +131,7 @@
 				32CF9336169B725C0095AD4A /* SFViewController.m */,
 				32CF931E169B725C0095AD4A /* Supporting Files */,
 			);
+			name = Classes;
 			path = SFImagePicker;
 			sourceTree = "<group>";
 		};
@@ -108,6 +147,33 @@
 				32CF932D169B725C0095AD4A /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		32CF933D169B72690095AD4A /* Image Picker Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3226D698169C6364002DCDD0 /* Assets */,
+				32CF9346169B73DF0095AD4A /* Model */,
+				32CF933E169B72DB0095AD4A /* SFImagePickerControllerViewController.h */,
+				32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */,
+				32CF934B169B79090095AD4A /* SFGroupTableViewController.h */,
+				32CF934C169B79090095AD4A /* SFGroupTableViewController.m */,
+				32CF934F169BA0CD0095AD4A /* SFAssetTableViewController.h */,
+				32CF9350169BA0CD0095AD4A /* SFAssetTableViewController.m */,
+				32CF934E169B96850095AD4A /* SFAssetsControllerDelegate.h */,
+				3226D69D169C63ED002DCDD0 /* SFAssetTableCell.h */,
+				3226D69E169C63ED002DCDD0 /* SFAssetTableCell.m */,
+			);
+			name = "Image Picker Controller";
+			sourceTree = "<group>";
+		};
+		32CF9346169B73DF0095AD4A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				32CF9341169B731A0095AD4A /* SFViewControllerModel.h */,
+				32CF9342169B731B0095AD4A /* SFViewControllerModel.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,6 +234,8 @@
 				32CF932E169B725C0095AD4A /* Default-568h@2x.png in Resources */,
 				32CF9331169B725C0095AD4A /* MainStoryboard_iPhone.storyboard in Resources */,
 				32CF9334169B725C0095AD4A /* MainStoryboard_iPad.storyboard in Resources */,
+				3226D69B169C637A002DCDD0 /* Overlay.png in Resources */,
+				3226D69C169C637A002DCDD0 /* Overlay@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,6 +249,11 @@
 				32CF9324169B725C0095AD4A /* main.m in Sources */,
 				32CF9328169B725C0095AD4A /* SFAppDelegate.m in Sources */,
 				32CF9337169B725C0095AD4A /* SFViewController.m in Sources */,
+				32CF9340169B72DB0095AD4A /* SFImagePickerControllerViewController.m in Sources */,
+				32CF9343169B731B0095AD4A /* SFViewControllerModel.m in Sources */,
+				32CF934D169B79090095AD4A /* SFGroupTableViewController.m in Sources */,
+				32CF9351169BA0CD0095AD4A /* SFAssetTableViewController.m in Sources */,
+				3226D69F169C63ED002DCDD0 /* SFAssetTableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +380,7 @@
 				32CF933C169B725C0095AD4A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
