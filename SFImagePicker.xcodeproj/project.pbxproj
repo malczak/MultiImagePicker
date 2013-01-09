@@ -23,7 +23,7 @@
 		32CF9331169B725C0095AD4A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CF932F169B725C0095AD4A /* MainStoryboard_iPhone.storyboard */; };
 		32CF9334169B725C0095AD4A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CF9332169B725C0095AD4A /* MainStoryboard_iPad.storyboard */; };
 		32CF9337169B725C0095AD4A /* SFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF9336169B725C0095AD4A /* SFViewController.m */; };
-		32CF9340169B72DB0095AD4A /* SFImagePickerControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */; };
+		32CF9340169B72DB0095AD4A /* SFMultiImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF933F169B72DB0095AD4A /* SFMultiImagePickerController.m */; };
 		32CF9343169B731B0095AD4A /* SFViewControllerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF9342169B731B0095AD4A /* SFViewControllerModel.m */; };
 		32CF9345169B734E0095AD4A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CF9344169B734E0095AD4A /* AssetsLibrary.framework */; };
 		32CF934D169B79090095AD4A /* SFGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF934C169B79090095AD4A /* SFGroupTableViewController.m */; };
@@ -53,8 +53,8 @@
 		32CF9333169B725C0095AD4A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		32CF9335169B725C0095AD4A /* SFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SFViewController.h; sourceTree = "<group>"; };
 		32CF9336169B725C0095AD4A /* SFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SFViewController.m; sourceTree = "<group>"; };
-		32CF933E169B72DB0095AD4A /* SFImagePickerControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFImagePickerControllerViewController.h; path = ImagePickerController/SFImagePickerControllerViewController.h; sourceTree = "<group>"; };
-		32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFImagePickerControllerViewController.m; path = ImagePickerController/SFImagePickerControllerViewController.m; sourceTree = "<group>"; };
+		32CF933E169B72DB0095AD4A /* SFMultiImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFMultiImagePickerController.h; path = ImagePickerController/SFMultiImagePickerController.h; sourceTree = "<group>"; };
+		32CF933F169B72DB0095AD4A /* SFMultiImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFMultiImagePickerController.m; path = ImagePickerController/SFMultiImagePickerController.m; sourceTree = "<group>"; };
 		32CF9341169B731A0095AD4A /* SFViewControllerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFViewControllerModel.h; path = ImagePickerController/SFViewControllerModel.h; sourceTree = "<group>"; };
 		32CF9342169B731B0095AD4A /* SFViewControllerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFViewControllerModel.m; path = ImagePickerController/SFViewControllerModel.m; sourceTree = "<group>"; };
 		32CF9344169B734E0095AD4A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -154,8 +154,8 @@
 			children = (
 				3226D698169C6364002DCDD0 /* Assets */,
 				32CF9346169B73DF0095AD4A /* Model */,
-				32CF933E169B72DB0095AD4A /* SFImagePickerControllerViewController.h */,
-				32CF933F169B72DB0095AD4A /* SFImagePickerControllerViewController.m */,
+				32CF933E169B72DB0095AD4A /* SFMultiImagePickerController.h */,
+				32CF933F169B72DB0095AD4A /* SFMultiImagePickerController.m */,
 				32CF934B169B79090095AD4A /* SFGroupTableViewController.h */,
 				32CF934C169B79090095AD4A /* SFGroupTableViewController.m */,
 				32CF934F169BA0CD0095AD4A /* SFAssetTableViewController.h */,
@@ -249,7 +249,7 @@
 				32CF9324169B725C0095AD4A /* main.m in Sources */,
 				32CF9328169B725C0095AD4A /* SFAppDelegate.m in Sources */,
 				32CF9337169B725C0095AD4A /* SFViewController.m in Sources */,
-				32CF9340169B72DB0095AD4A /* SFImagePickerControllerViewController.m in Sources */,
+				32CF9340169B72DB0095AD4A /* SFMultiImagePickerController.m in Sources */,
 				32CF9343169B731B0095AD4A /* SFViewControllerModel.m in Sources */,
 				32CF934D169B79090095AD4A /* SFGroupTableViewController.m in Sources */,
 				32CF9351169BA0CD0095AD4A /* SFAssetTableViewController.m in Sources */,

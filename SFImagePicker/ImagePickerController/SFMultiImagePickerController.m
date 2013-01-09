@@ -1,5 +1,5 @@
 //
-//  SFImagePickerControllerViewController.m
+//  SFMultiImagePickerController.m
 //  SFImagePicker
 //
 //  Created by malczak on 1/7/13.
@@ -9,7 +9,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "SFImagePickerControllerViewController.h"
+#import "SFMultiImagePickerController.h"
 #import "SFViewControllerModel.h"
 #import "SFGroupTableViewController.h"
 #import "SFAssetTableViewController.h"
@@ -29,11 +29,11 @@
  
  */
 
-@interface SFImagePickerControllerViewController ()
+@interface SFMultiImagePickerController ()
 
 @end
 
-@implementation SFImagePickerControllerViewController
+@implementation SFMultiImagePickerController
 
 @synthesize delegate;
 

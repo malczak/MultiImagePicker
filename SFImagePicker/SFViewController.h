@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-#import "SFImagePickerControllerViewController.h"
+#import "SFMultiImagePickerController.h"
 
-@interface SFViewController : UIViewController <SFImagePickerDelegate>
+@interface SFViewController : UIViewController <SFMultiImagePickerDelegate>
 
 @property (nonatomic, retain) IBOutlet UIButton *showPickerButton;
 
--(void)sfImagePickerContoller:(SFImagePickerControllerViewController *)imagePicker didFinishWithInfo:(NSArray *)info;
--(void)sfImagePickerContollerDidCancel:(SFImagePickerControllerViewController *)imagePicker;
+-(void)sfImagePickerContoller:(SFMultiImagePickerController *)imagePicker didFinishWithInfo:(NSArray *)info;
+-(void)sfImagePickerContollerDidCancel:(SFMultiImagePickerController *)imagePicker;
 
 @end

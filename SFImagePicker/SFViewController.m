@@ -7,7 +7,7 @@
 //
 
 #import "SFViewController.h"
-#import "SFImagePickerControllerViewController.h"
+#import "SFMultiImagePickerController.h"
 
 @interface SFViewController ()
 
@@ -34,19 +34,19 @@
 - (void)showPicker:(id)sender
 {
     
-    SFImagePickerControllerViewController *imagePicker = [[SFImagePickerControllerViewController alloc] init];
+    SFMultiImagePickerController *imagePicker = [[SFMultiImagePickerController alloc] init];
     imagePicker.delegate = self;
     [imagePicker setAllowedSelectionSize:8];
     [self presentViewController:imagePicker animated:YES completion:nil];    
 }
 
 #pragma mark -- sfImagePickerDelegate methods --
--(void)sfImagePickerContoller:(SFImagePickerControllerViewController *)imagePicker didFinishWithInfo:(NSArray *)info
+-(void)sfImagePickerContoller:(SFMultiImagePickerController *)imagePicker didFinishWithInfo:(NSArray *)info
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)sfImagePickerContollerDidCancel:(SFImagePickerControllerViewController *)imagePicker
+-(void)sfImagePickerContollerDidCancel:(SFMultiImagePickerController *)imagePicker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -1,5 +1,5 @@
 //
-//  SFImagePickerControllerViewController.h
+//  SFMultiImagePickerController.h
 //  SFImagePicker
 //
 //  Created by malczak on 1/7/13.
@@ -10,7 +10,7 @@
 #import "SFViewControllerModel.h"
 #import "SFAssetsControllerDelegate.h"
 
-@interface SFImagePickerControllerViewController : UIViewController <SFAssetsControllerDelegate> {
+@interface SFMultiImagePickerController : UIViewController <SFAssetsControllerDelegate> {
     UINavigationController *navigationController;
     UIScrollView *selectedAssetsView;
     UILabel *emptySelectionPrompt;
@@ -31,10 +31,10 @@
 @end
 
 
-@protocol SFImagePickerDelegate <NSObject>
+@protocol SFMultiImagePickerDelegate <NSObject>
 
--(void) sfImagePickerContollerDidCancel:(SFImagePickerControllerViewController*) imagePicker;
--(void) sfImagePickerContoller:(SFImagePickerControllerViewController*) imagePicker didFinishWithInfo:(NSArray *)info;
+-(void) sfImagePickerContollerDidCancel:(SFMultiImagePickerController *) imagePicker;
+-(void) sfImagePickerContoller:(SFMultiImagePickerController *) imagePicker didFinishWithInfo:(NSArray *)info;
 
 @end
 
