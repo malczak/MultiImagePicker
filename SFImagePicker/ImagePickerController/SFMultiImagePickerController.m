@@ -44,14 +44,17 @@
         model = [[SFViewControllerModel alloc] init];
         selectedAssetsThumbnails = [[NSMutableArray alloc] init];
 
-        dragIndicator = [[UIImageView alloc] init];
+        dragIndicator = [[SFDragIndicator alloc] init];
 
-        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureTap:)];
+        tapRecognizer.numberOfTapsRequired = 1;
+        tapRecognizer.numberOfTouchesRequired = 1;
         tapRecognizer.cancelsTouchesInView = YES;
 
-        pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture2:)];
+        pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureLongPress:)];
+        pressRecognizer.numberOfTouchesRequired = 1;
+        pressRecognizer.minimumPressDuration = 0.3;
         pressRecognizer.cancelsTouchesInView = YES;
-        [pressRecognizer requireGestureRecognizerToFail:tapRecognizer];
 
     }
     return self;
@@ -94,8 +97,11 @@
     selectedAssetsView = [[UIScrollView alloc] initWithFrame:selectedRect];
     selectedAssetsView.showsHorizontalScrollIndicator = NO;
     selectedAssetsView.showsVerticalScrollIndicator = NO;
-    selectedAssetsView.pagingEnabled = YES;
+    selectedAssetsView.pagingEnabled = NO;
     selectedAssetsView.bounces = NO;
+    selectedAssetsView.alwaysBounceHorizontal = NO;
+    selectedAssetsView.alwaysBounceVertical = NO;
+    selectedAssetsView.scrollsToTop = NO;
     selectedAssetsView.backgroundColor = [UIColor whiteColor];
     [selectedAssetsView addGestureRecognizer:tapRecognizer];
     [selectedAssetsView addGestureRecognizer:pressRecognizer];
@@ -143,57 +149,119 @@
     
 }
 
-- (void)handleGesture:(UIGestureRecognizer *)recognizer {
+- (void)handleGestureTap:(UIGestureRecognizer *)recognizer {
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
 
         SelectedAssetView *v = [self viewFromRecognizer:recognizer];
         if (v) {
-            v.alpha = 0.3;
+            NSLog(@"Tap");
         }
 
     }
 }
 
-- (void)handleGesture2:(UITapGestureRecognizer *)recognizer {
+- (void)handleGestureLongPress:(UITapGestureRecognizer *)recognizer {
     if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+
+        SelectedAssetView *selectedThumb;
 
         if ( recognizer.state == UIGestureRecognizerStateBegan ) {
 
-            SelectedAssetView *v = [self viewFromRecognizer:recognizer];
-            if (v) {
+            selectedThumb = [self viewFromRecognizer:recognizer];
+            if (selectedThumb) {
+
+                selectedThumb.dragged = YES;
 
                 selectedAssetsView.scrollEnabled = NO;
-/*
-                UIGraphicsBeginImageContext(v.frame.size);
-                CGContextRef ctx = UIGraphicsGetCurrentContext();
-                [v.layer renderInContext:ctx];
-                UIImage *dragIndicatorImage = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-*/
-                UIImage *dragIndicatorImage = [UIImage imageWithCGImage:v.asset.thumbnail];
 
-                CGRect frame = [recognizer.view convertRect:v.frame toView:self.view];
-                frame = CGRectOffset(frame, 0, -frame.size.height-5);
-                [dragIndicator setImage:dragIndicatorImage];
+
+                UIImage *dragIndicatorImage = [UIImage imageWithCGImage:selectedThumb.asset.thumbnail];
+
+                CGRect frame = [recognizer.view convertRect:selectedThumb.frame toView:self.view];
+                CGPoint mousePosition = [recognizer locationInView:self.view];
+                float dx = frame.size.width - 5;
+                float dy = frame.size.height - 5;
+                frame.origin.x = mousePosition.x - dx;
+                frame.origin.y = mousePosition.y - dy;
+
+                dragIndicator.image = dragIndicatorImage;
+                dragIndicator.relatedData = selectedThumb;
                 dragIndicator.frame = frame;
+
                 [self.view addSubview:dragIndicator];
 
-                v.alpha = 1.0;
 
                 selectedAssetsView.scrollEnabled = YES;
 
             }
         } else
         if ( recognizer.state == UIGestureRecognizerStateChanged ) {
-            CGPoint position = [recognizer locationInView:self.view];
             CGRect frame = dragIndicator.frame;
-            frame.origin.x = position.x;
+            CGPoint mousePosition = [recognizer locationInView:self.view];
+            float dx = frame.size.width - 5;
+            float dy = frame.size.height - 5;
+            frame.origin.x = mousePosition.x - dx;
+            frame.origin.y = mousePosition.y - dy;
             dragIndicator.frame = frame;
-            NSLog(@"Position %f %f", frame.origin.x, frame.origin.y);
+
+            // ? dragged out to delete
+            CGRect selectedViewFrame = selectedAssetsView.frame;
+            float distance = ( selectedViewFrame.origin.y - mousePosition.y );
+            if (distance > REMOVE_DRAGGED_ELEMENT_DIST ) {
+                dragIndicator.alpha = 0.4;
+            } else{
+                dragIndicator.alpha = 1.0;
+            }
+
+            //try to calc new index
+            float scrollViewDragOffset = selectedAssetsView.contentOffset.x + mousePosition.x;
+            float newDropMinOffset = 0;
+            float newDropMaxOffset = 0;
+            int selectedCount = [selectedAssetsThumbnails count];
+            int dropIndex = 0;
+            while (dropIndex<selectedCount) {
+                SelectedAssetView *thumb = [selectedAssetsThumbnails objectAtIndex:dropIndex];
+
+                newDropMinOffset = newDropMaxOffset;
+                newDropMaxOffset = thumb.frame.origin.x + thumb.frame.size.width * 0.5;
+
+                NSLog(@"new %d/%d is %f<>%f | %f",dropIndex,selectedCount,newDropMinOffset,newDropMaxOffset,scrollViewDragOffset);
+
+                if ( (scrollViewDragOffset > newDropMinOffset) && (scrollViewDragOffset < newDropMaxOffset) ) {
+                    NSLog(@"New index should be %d",dropIndex);
+                    int dragIndex = [selectedAssetsThumbnails indexOfObject:dragIndicator.relatedData];
+                    [selectedAssetsThumbnails exchangeObjectAtIndex:dragIndex withObjectAtIndex:dropIndex];
+                    [self layoutSelectedAssets];
+                    break;
+                }
+
+                dropIndex+=1;
+            }
 
         } else
         if ( recognizer.state == UIGestureRecognizerStateEnded ) {
             [dragIndicator removeFromSuperview];
+
+            selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
+            selectedThumb.dragged = NO;
+
+            //check if should be removed / if not calc new index :P
+            CGPoint mousePosition = [recognizer locationInView:self.view];
+            CGRect selectedViewFrame = selectedAssetsView.frame;
+            float distance = ( selectedViewFrame.origin.y - mousePosition.y );
+
+            if (distance > REMOVE_DRAGGED_ELEMENT_DIST ) {
+                [self userSelectedAsset:selectedThumb.asset];
+                /// update somehow a table view
+            } else {
+
+            }
+
+            selectedAssetsView.contentOffset = CGPointMake(10, 0);
+
+
+            dragIndicator.image = nil;
+            dragIndicator.relatedData = nil;
         }
 
 
@@ -351,8 +419,16 @@
             
         [model.selectedAssets removeObjectAtIndex:selectedIndex];
 
+        // update
         [self layoutSelectedAssets];
-        
+
+        // scroll to closest to removed one
+        thumb = [selectedAssetsThumbnails objectAtIndex:MIN(selectedIndex, selectedCount-2)];
+        CGRect lastFrame = thumb.frame;
+        lastFrame = CGRectOffset(lastFrame, 5, 0);
+        [selectedAssetsView scrollRectToVisible:lastFrame animated:NO];
+
+
     } else
     if ( selectedCount < model.allowedSelectionSize) {
 
@@ -366,7 +442,14 @@
 
         [model.selectedAssets addObject:url];
 
+        // update
         [self layoutSelectedAssets];
+
+        // scroll to show last element
+        CGRect lastFrame = thumb.frame;
+        lastFrame = CGRectOffset(lastFrame, 5, 0);
+        [selectedAssetsView scrollRectToVisible:lastFrame animated:NO];
+
     } else {
         //show info
         emptySelectionPrompt.hidden = NO;
@@ -434,7 +517,6 @@
         }
         
         selectedAssetsView.contentSize = CGSizeMake( X, thumb.frame.size.height);
-        [selectedAssetsView scrollRectToVisible:thumb.frame animated:NO];
     }
    
 }

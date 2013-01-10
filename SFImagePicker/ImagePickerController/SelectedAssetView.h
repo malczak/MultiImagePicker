@@ -19,6 +19,8 @@
 
 }
 
+@property (nonatomic, assign) BOOL dragged;
+
 @property (nonatomic, readonly, getter=_getAsset) ALAsset *asset;
 
 -(id) initWithFrame:(CGRect) inFrame andAsset:(ALAsset *) inAsset;

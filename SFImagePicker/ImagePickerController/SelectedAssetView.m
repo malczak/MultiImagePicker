@@ -47,6 +47,12 @@
     return self;
 }
 
+- (void)setDragged:(BOOL)value {
+    _dragged = value;
+    imageView.hidden = self.dragged;
+    [self setNeedsDisplay];
+}
+
 -(ALAsset *)_getAsset
 {
     return asset;
@@ -54,6 +60,16 @@
 
 -(NSString *)assetUID {
     return assetUniqueId;
+}
+
+- (void)drawRect:(CGRect)rect {
+    if (NO == self.dragged) {
+        CGRect frameRect = CGRectInset(rect, 4, 4);
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGContextSetRGBFillColor(ctx, 0.4, 0.4, 0.4, 1.0);
+        CGContextAddRect(ctx, frameRect);
+        CGContextFillPath(ctx);
+    }
 }
 
 - (void)dealloc {

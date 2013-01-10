@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "SFViewControllerModel.h"
 #import "SFAssetsControllerDelegate.h"
+#import "SFDragIndicator.h"
+
+
+#define REMOVE_DRAGGED_ELEMENT_DIST 40.0f
 
 @interface SFMultiImagePickerController : UIViewController <SFAssetsControllerDelegate> {
     UINavigationController *navigationController;
@@ -22,7 +26,7 @@
     UILongPressGestureRecognizer *pressRecognizer;
 
     // drag&drop
-    UIImageView *dragIndicator;
+    SFDragIndicator *dragIndicator;
     
     SFViewControllerModel *model;
 }

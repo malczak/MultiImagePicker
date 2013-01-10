@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31AE18E0E605F8BAEE2E79D2 /* SFDragIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AE18446F23D95A4FB37451 /* SFDragIndicator.m */; };
 		31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AE1BDD1848125634C01C51 /* SelectedAssetView.m */; };
 		3226D696169C4440002DCDD0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3226D695169C4440002DCDD0 /* QuartzCore.framework */; };
 		3226D69B169C637A002DCDD0 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D699169C637A002DCDD0 /* Overlay.png */; };
@@ -32,8 +33,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31AE18446F23D95A4FB37451 /* SFDragIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFDragIndicator.m; sourceTree = "<group>"; };
 		31AE1A465AC4B6A56136470D /* SelectedAssetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectedAssetView.h; path = ImagePickerController/SelectedAssetView.h; sourceTree = "<group>"; };
 		31AE1BDD1848125634C01C51 /* SelectedAssetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectedAssetView.m; path = ImagePickerController/SelectedAssetView.m; sourceTree = "<group>"; };
+		31AE1DB8AFC6A163406E0E4A /* SFDragIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFDragIndicator.h; sourceTree = "<group>"; };
 		3226D695169C4440002DCDD0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3226D699169C637A002DCDD0 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Overlay.png; path = ImagePickerController/Overlay.png; sourceTree = "<group>"; };
 		3226D69A169C637A002DCDD0 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Overlay@2x.png"; path = "ImagePickerController/Overlay@2x.png"; sourceTree = "<group>"; };
@@ -168,6 +171,8 @@
 				3226D69E169C63ED002DCDD0 /* SFAssetTableCell.m */,
 				31AE1BDD1848125634C01C51 /* SelectedAssetView.m */,
 				31AE1A465AC4B6A56136470D /* SelectedAssetView.h */,
+				31AE18446F23D95A4FB37451 /* SFDragIndicator.m */,
+				31AE1DB8AFC6A163406E0E4A /* SFDragIndicator.h */,
 			);
 			name = "Image Picker Controller";
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				32CF9351169BA0CD0095AD4A /* SFAssetTableViewController.m in Sources */,
 				3226D69F169C63ED002DCDD0 /* SFAssetTableCell.m in Sources */,
 				31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */,
+				31AE18E0E605F8BAEE2E79D2 /* SFDragIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
