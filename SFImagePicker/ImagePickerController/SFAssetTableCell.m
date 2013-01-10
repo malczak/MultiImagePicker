@@ -51,9 +51,7 @@
             
             CGContextDrawImage(ctx, CGRectMake(X, 2, 75, 75), asset.thumbnail);
 
-            id url = [asset valueForProperty:ALAssetPropertyAssetURL];
-                        
-            BOOL selected = [model.selectedAssets indexOfObject:url] != NSNotFound;
+            BOOL selected = [model isSelectedAsset:asset];
             if(selected) {
                 CGContextDrawImage(ctx, CGRectMake(X, 2, 75, 75), [model.selectedOverlayImage CGImage]);
             }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AE1BDD1848125634C01C51 /* SelectedAssetView.m */; };
 		3226D696169C4440002DCDD0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3226D695169C4440002DCDD0 /* QuartzCore.framework */; };
 		3226D69B169C637A002DCDD0 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D699169C637A002DCDD0 /* Overlay.png */; };
 		3226D69C169C637A002DCDD0 /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D69A169C637A002DCDD0 /* Overlay@2x.png */; };
@@ -31,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31AE1A465AC4B6A56136470D /* SelectedAssetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectedAssetView.h; path = ImagePickerController/SelectedAssetView.h; sourceTree = "<group>"; };
+		31AE1BDD1848125634C01C51 /* SelectedAssetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectedAssetView.m; path = ImagePickerController/SelectedAssetView.m; sourceTree = "<group>"; };
 		3226D695169C4440002DCDD0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3226D699169C637A002DCDD0 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Overlay.png; path = ImagePickerController/Overlay.png; sourceTree = "<group>"; };
 		3226D69A169C637A002DCDD0 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Overlay@2x.png"; path = "ImagePickerController/Overlay@2x.png"; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				32CF934E169B96850095AD4A /* SFAssetsControllerDelegate.h */,
 				3226D69D169C63ED002DCDD0 /* SFAssetTableCell.h */,
 				3226D69E169C63ED002DCDD0 /* SFAssetTableCell.m */,
+				31AE1BDD1848125634C01C51 /* SelectedAssetView.m */,
+				31AE1A465AC4B6A56136470D /* SelectedAssetView.h */,
 			);
 			name = "Image Picker Controller";
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				32CF934D169B79090095AD4A /* SFGroupTableViewController.m in Sources */,
 				32CF9351169BA0CD0095AD4A /* SFAssetTableViewController.m in Sources */,
 				3226D69F169C63ED002DCDD0 /* SFAssetTableCell.m in Sources */,
+				31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

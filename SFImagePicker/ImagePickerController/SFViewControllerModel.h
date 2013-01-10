@@ -25,6 +25,6 @@
 
 @property (nonatomic, retain) NSMutableArray *selectedAssets;
 
-@property (nonatomic, retain) NSMutableArray *selectedAssetsThumbnails;
+-(BOOL)isSelectedAsset:(ALAsset *)asset;
 
 @end

@@ -11,7 +11,7 @@
 @implementation SFViewControllerModel
 
 @synthesize allowedSelectionSize, assetsLibrary, assetGroups, selectedGroup;
-@synthesize selectedGroupAssets, selectedAssetsThumbnails;
+@synthesize selectedGroupAssets;
 @synthesize selectedOverlayImage;
 
 -(id) init {
@@ -20,7 +20,6 @@
         self.assetGroups = [[NSMutableArray alloc] init];
         self.selectedGroupAssets = [[NSMutableArray alloc] init];
         self.selectedAssets = [[NSMutableArray alloc] init];
-        self.selectedAssetsThumbnails = [[NSMutableArray alloc] init];
         self.allowedSelectionSize = 1;
     }
     return self;
@@ -36,6 +35,11 @@
     // clear instances
 }
 
+-(BOOL)isSelectedAsset:(ALAsset *)asset {
+    id url = [asset valueForProperty:ALAssetPropertyAssetURL];
+    return ( [self.selectedAssets indexOfObject:url] != NSNotFound );
+}
+
 -(void)dealloc
 {
     [self.assetGroups removeAllObjects];
@@ -46,9 +50,6 @@
     
     [self.selectedAssets removeAllObjects];
     self.selectedAssets = nil;
-    
-    [self.selectedAssetsThumbnails removeAllObjects];
-    self.selectedAssetsThumbnails = nil;
 }
 
 @end

@@ -14,6 +14,15 @@
     UINavigationController *navigationController;
     UIScrollView *selectedAssetsView;
     UILabel *emptySelectionPrompt;
+
+    NSMutableArray *selectedAssetsThumbnails;
+
+    // gesture recognizers
+    UITapGestureRecognizer *tapRecognizer;
+    UILongPressGestureRecognizer *pressRecognizer;
+
+    // drag&drop
+    UIImageView *dragIndicator;
     
     SFViewControllerModel *model;
 }

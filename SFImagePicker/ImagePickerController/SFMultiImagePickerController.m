@@ -13,6 +13,7 @@
 #import "SFViewControllerModel.h"
 #import "SFGroupTableViewController.h"
 #import "SFAssetTableViewController.h"
+#import "SelectedAssetView.h"
 
 /**
  
@@ -41,6 +42,17 @@
     self = [super init];
     if(self) {
         model = [[SFViewControllerModel alloc] init];
+        selectedAssetsThumbnails = [[NSMutableArray alloc] init];
+
+        dragIndicator = [[UIImageView alloc] init];
+
+        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        tapRecognizer.cancelsTouchesInView = NO;
+
+        pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture2:)];
+        pressRecognizer.cancelsTouchesInView = NO;
+        [pressRecognizer requireGestureRecognizerToFail:tapRecognizer];
+
     }
     return self;
 }
@@ -66,7 +78,7 @@
 
     CGRect viewRect = self.view.frame;
     CGFloat navHeight = viewRect.size.height - 90;
-    
+
     // create main navigation controller to display assets
     navigationController = [[UINavigationController alloc] init];
     
@@ -80,11 +92,15 @@
     CGRect selectedRect = CGRectMake(0, navHeight, viewRect.size.width, viewRect.size.height - navHeight);
     //create selected assets scroll view
     selectedAssetsView = [[UIScrollView alloc] initWithFrame:selectedRect];
+    selectedAssetsView.showsHorizontalScrollIndicator = NO;
+    selectedAssetsView.showsVerticalScrollIndicator = NO;
     selectedAssetsView.pagingEnabled = YES;
     selectedAssetsView.bounces = NO;
     selectedAssetsView.backgroundColor = [UIColor whiteColor];
+    [selectedAssetsView addGestureRecognizer:tapRecognizer];
+    [selectedAssetsView addGestureRecognizer:pressRecognizer];
     [self.view addSubview:selectedAssetsView];
-    
+
     //empty selection prompt
     emptySelectionPrompt = [[UILabel alloc] initWithFrame:selectedRect];
     emptySelectionPrompt.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.6];
@@ -125,6 +141,69 @@
     
     [model.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:completeBlock failureBlock:failureBlock];
     
+}
+
+- (void)handleGesture:(UIGestureRecognizer *)recognizer {
+    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+
+        SelectedAssetView *v = [self viewFromRecognizer:recognizer];
+        if (v) {
+            v.alpha = 0.3;
+        }
+
+    }
+}
+
+- (void)handleGesture2:(UITapGestureRecognizer *)recognizer {
+    if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+
+        if ( recognizer.state == UIGestureRecognizerStateBegan ) {
+
+            SelectedAssetView *v = [self viewFromRecognizer:recognizer];
+            if (v) {
+
+                UIGraphicsBeginImageContext(v.frame.size);
+                CGContextRef ctx = UIGraphicsGetCurrentContext();
+                [v.layer renderInContext:ctx];
+                UIImage *dragIndicatorImage = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+
+                CGRect frame = [recognizer.view convertRect:v.frame toView:self.view];
+                frame = CGRectOffset(frame, 0, -frame.size.height-5);
+                [dragIndicator setImage:dragIndicatorImage];
+                dragIndicator.frame = frame;
+                [self.view addSubview:dragIndicator];
+
+                v.alpha = 1.0;
+            }
+        } else
+        if ( recognizer.state == UIGestureRecognizerStateChanged ) {
+            CGPoint position = [recognizer locationInView:recognizer.view];
+            CGRect frame = dragIndicator.frame;
+            frame.origin.x = position.x;
+            dragIndicator.frame = frame;
+
+        } else
+        if ( recognizer.state == UIGestureRecognizerStateEnded ) {
+            [dragIndicator removeFromSuperview];
+        }
+
+
+    }
+}
+
+- (SelectedAssetView *)viewFromRecognizer:(UIGestureRecognizer *)recognizer {
+    CGPoint tapPosition = [recognizer locationInView:recognizer.view];
+    for ( SelectedAssetView *selectedView in selectedAssetsThumbnails) {
+        CGRect frame = selectedView.frame;
+        if (CGRectContainsPoint(frame, tapPosition)) {
+            NSString *name0 = [NSString stringWithUTF8String:object_getClassName(recognizer)];
+            NSString *name1 = [NSString stringWithUTF8String:object_getClassName(selectedView)];
+            NSLog(@"%@ detected on - %@", name0, name1);
+            return selectedView;
+        }
+    }
+    return nil;
 }
 
 - (void)groupEnummerationDone
@@ -249,21 +328,21 @@
     }
     
     // if selected deselect
-    UIView *thumb;
+    SelectedAssetView *thumb;
     id url = [asset valueForProperty:ALAssetPropertyAssetURL];
     
-    int selectedCount = [model.selectedAssets count];
-    int selectedIndex = [model.selectedAssets indexOfObject:url];
+    NSUInteger selectedCount = [model.selectedAssets count];
+    NSUInteger selectedIndex = [model.selectedAssets indexOfObject:url];
 
     if( selectedIndex != NSNotFound ) {
-        
-        thumb = [model.selectedAssetsThumbnails objectAtIndex:selectedIndex];
+
+        thumb = (SelectedAssetView*)[selectedAssetsThumbnails objectAtIndex:selectedIndex];
         [thumb removeFromSuperview];
+        [selectedAssetsThumbnails removeObjectAtIndex:selectedIndex];
         //remove
             
         [model.selectedAssets removeObjectAtIndex:selectedIndex];
-        [model.selectedAssetsThumbnails removeObjectAtIndex:selectedIndex];
-            
+
         [self layoutSelectedAssets];
         
     } else
@@ -273,13 +352,12 @@
 
         CGSize thumbSize = CGSizeMake(75, 75);
         
-        thumb = [self createThumbViewWithAsset:asset];
-        thumb.bounds = CGRectMake( 0, 0, thumbSize.width, thumbSize.height);
+        thumb = [[SelectedAssetView alloc] initWithFrame:CGRectMake(0, 0, thumbSize.width, thumbSize.height) andAsset:asset];
         [selectedAssetsView addSubview:thumb];
-        
+        [selectedAssetsThumbnails addObject:thumb];
+
         [model.selectedAssets addObject:url];
-        [model.selectedAssetsThumbnails addObject:thumb];
- 
+
         [self layoutSelectedAssets];
     } else {
         //show info
@@ -330,7 +408,7 @@
     
     UIView *thumb = nil;
     
-    int count = [model.selectedAssetsThumbnails count];
+    int count = [selectedAssetsThumbnails count];
     
     
     NSLog(@"count %d",count);
@@ -340,7 +418,7 @@
         int index = 0;
         
         while(index<count) {
-            thumb = [model.selectedAssetsThumbnails objectAtIndex:index];
+            thumb = [selectedAssetsThumbnails objectAtIndex:index];
             thumb.frame = CGRectMake( X, 4, thumb.bounds.size.width, thumb.bounds.size.height);
             NSLog(@" %f + %f",X,thumb.frame.size.width);
             X += 75 + 4;
@@ -351,13 +429,6 @@
         [selectedAssetsView scrollRectToVisible:thumb.frame animated:NO];
     }
    
-}
-
--(UIView*) createThumbViewWithAsset:(ALAsset*) asset {
-    UIImage *thumbImage = [UIImage imageWithCGImage:asset.thumbnail];
-    UIImageView *thumb = [[UIImageView alloc] init];
-    thumb.image = thumbImage;
-    return thumb;
 }
 
 -(void)dealloc
