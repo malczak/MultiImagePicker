@@ -397,22 +397,35 @@
     [model.selectedGroup enumerateAssetsUsingBlock:completeBlock];
 }
 
+-(SelectedAssetView *)assetThumbnailFromAsset:(ALAsset *)asset {
+    NSURL *url = [asset valueForProperty:ALAssetPropertyAssetURL];
+    NSString *assetUID= url.absoluteString;
+
+    for ( SelectedAssetView * thumb in selectedAssetsThumbnails ) {
+        if ( [thumb.assetUID isEqualToString:assetUID] ) {
+            return thumb;
+        }
+    }
+
+    return nil;
+}
+
 -(void)userSelectedAsset:(ALAsset *)asset
 {
     if(asset == nil) {
         return;
     }
-    
-    // if selected deselect
-    SelectedAssetView *thumb;
-    id url = [asset valueForProperty:ALAssetPropertyAssetURL];
-    
+
     NSUInteger selectedCount = [model.selectedAssets count];
-    NSUInteger selectedIndex = [model.selectedAssets indexOfObject:url];
 
-    if( selectedIndex != NSNotFound ) {
 
-        thumb = (SelectedAssetView*)[selectedAssetsThumbnails objectAtIndex:selectedIndex];
+    SelectedAssetView *thumb = [self assetThumbnailFromAsset:asset];
+    id url = [asset valueForProperty:ALAssetPropertyAssetURL];
+
+    // if selected deselect
+    if( nil != thumb ) {
+
+        NSUInteger selectedIndex = [selectedAssetsThumbnails indexOfObject:thumb];
         [thumb removeFromSuperview];
         [selectedAssetsThumbnails removeObjectAtIndex:selectedIndex];
         //remove
