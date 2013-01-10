@@ -47,10 +47,10 @@
         dragIndicator = [[UIImageView alloc] init];
 
         tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
-        tapRecognizer.cancelsTouchesInView = NO;
+        tapRecognizer.cancelsTouchesInView = YES;
 
         pressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture2:)];
-        pressRecognizer.cancelsTouchesInView = NO;
+        pressRecognizer.cancelsTouchesInView = YES;
         [pressRecognizer requireGestureRecognizerToFail:tapRecognizer];
 
     }
@@ -162,11 +162,15 @@
             SelectedAssetView *v = [self viewFromRecognizer:recognizer];
             if (v) {
 
+                selectedAssetsView.scrollEnabled = NO;
+/*
                 UIGraphicsBeginImageContext(v.frame.size);
                 CGContextRef ctx = UIGraphicsGetCurrentContext();
                 [v.layer renderInContext:ctx];
                 UIImage *dragIndicatorImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
+*/
+                UIImage *dragIndicatorImage = [UIImage imageWithCGImage:v.asset.thumbnail];
 
                 CGRect frame = [recognizer.view convertRect:v.frame toView:self.view];
                 frame = CGRectOffset(frame, 0, -frame.size.height-5);
@@ -175,13 +179,17 @@
                 [self.view addSubview:dragIndicator];
 
                 v.alpha = 1.0;
+
+                selectedAssetsView.scrollEnabled = YES;
+
             }
         } else
         if ( recognizer.state == UIGestureRecognizerStateChanged ) {
-            CGPoint position = [recognizer locationInView:recognizer.view];
+            CGPoint position = [recognizer locationInView:self.view];
             CGRect frame = dragIndicator.frame;
             frame.origin.x = position.x;
             dragIndicator.frame = frame;
+            NSLog(@"Position %f %f", frame.origin.x, frame.origin.y);
 
         } else
         if ( recognizer.state == UIGestureRecognizerStateEnded ) {

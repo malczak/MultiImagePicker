@@ -47,6 +47,11 @@
     return self;
 }
 
+-(ALAsset *)_getAsset
+{
+    return asset;
+}
+
 -(NSString *)assetUID {
     return assetUniqueId;
 }
