@@ -95,6 +95,7 @@
     CGRect selectedRect = CGRectMake(0, navHeight, viewRect.size.width, viewRect.size.height - navHeight);
     //create selected assets scroll view
     selectedAssetsView = [[UIScrollView alloc] initWithFrame:selectedRect];
+    selectedAssetsView.contentInset = UIEdgeInsetsMake(SELECTED_THUMBS_GAP,SELECTED_THUMBS_GAP,SELECTED_THUMBS_GAP,SELECTED_THUMBS_GAP);
     selectedAssetsView.showsHorizontalScrollIndicator = NO;
     selectedAssetsView.showsVerticalScrollIndicator = NO;
     selectedAssetsView.pagingEnabled = NO;
@@ -193,11 +194,18 @@
 
                 selectedAssetsView.scrollEnabled = YES;
 
+                // update scroll if needed
+                NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(handleAutoSizeTimer) userInfo:nil repeats:YES];
+                [timer fire];
+
+
             }
         } else
         if ( recognizer.state == UIGestureRecognizerStateChanged ) {
+            selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
             CGRect frame = dragIndicator.frame;
-            CGPoint mousePosition = [recognizer locationInView:self.view];
+            mousePosition = [recognizer locationInView:self.view];
+
             float dx = frame.size.width - 5;
             float dy = frame.size.height - 5;
             frame.origin.x = mousePosition.x - dx;
@@ -213,29 +221,43 @@
                 dragIndicator.alpha = 1.0;
             }
 
-            //try to calc new index
+            //try to calc new index by only comparing with neighbours
             float scrollViewDragOffset = selectedAssetsView.contentOffset.x + mousePosition.x;
-            float newDropMinOffset = 0;
-            float newDropMaxOffset = 0;
             int selectedCount = [selectedAssetsThumbnails count];
-            int dropIndex = 0;
-            while (dropIndex<selectedCount) {
+            int dragIndex = [selectedAssetsThumbnails indexOfObject:selectedThumb];
+
+            CGRect dragRect = selectedThumb.frame;
+            float offsetExtra  = dragRect.size.width * 0.5 + SELECTED_THUMBS_GAP;
+            float newDropMinOffset = dragRect.origin.x - offsetExtra;
+            float newDropMaxOffset = dragRect.origin.x + dragRect.size.width + offsetExtra;
+
+            int dropIndex = dragIndex;
+            int leftIndex = MAX( dragIndex-1, 0 );
+            int rightIndex = MIN( dragIndex+1, selectedCount-1 );
+            if ( scrollViewDragOffset < newDropMinOffset ) {
+                dropIndex = leftIndex;
+            } else
+            if ( scrollViewDragOffset > newDropMaxOffset ) {
+                dropIndex = rightIndex;
+            }
+
+            if ( dropIndex!=dragIndex ) {
+                NSLog(@"New index should be %d",dropIndex);
+
                 SelectedAssetView *thumb = [selectedAssetsThumbnails objectAtIndex:dropIndex];
 
-                newDropMinOffset = newDropMaxOffset;
-                newDropMaxOffset = thumb.frame.origin.x + thumb.frame.size.width * 0.5;
+                [selectedAssetsThumbnails exchangeObjectAtIndex:dragIndex withObjectAtIndex:dropIndex];
 
-                NSLog(@"new %d/%d is %f<>%f | %f",dropIndex,selectedCount,newDropMinOffset,newDropMaxOffset,scrollViewDragOffset);
+                CGRect dragFrame = selectedThumb.frame;
+                CGRect dropFrame = thumb.frame;
 
-                if ( (scrollViewDragOffset > newDropMinOffset) && (scrollViewDragOffset < newDropMaxOffset) ) {
-                    NSLog(@"New index should be %d",dropIndex);
-                    int dragIndex = [selectedAssetsThumbnails indexOfObject:dragIndicator.relatedData];
-                    [selectedAssetsThumbnails exchangeObjectAtIndex:dragIndex withObjectAtIndex:dropIndex];
+                [UIView animateWithDuration:0.1 animations:^(){
+                    thumb.frame = dragFrame;
+                    selectedThumb.frame = dropFrame;
+                } completion:^(BOOL done){
                     [self layoutSelectedAssets];
-                    break;
-                }
-
-                dropIndex+=1;
+//                    [self layoutSelectedAssetWithOffset:CGPointMake(dropFrame.origin.x, 0)];
+                }];
             }
 
         } else
@@ -262,9 +284,25 @@
 
             dragIndicator.image = nil;
             dragIndicator.relatedData = nil;
+
         }
 
 
+    }
+}
+
+-(void) handleAutoSizeTimer {
+    if (CGPointEqualToPoint(mousePosition, CGPointZero)){
+        return;
+    }
+    CGPoint offset = selectedAssetsView.contentOffset;
+    float cw = self.view.frame.size.width * 0.5;
+    float d_ = mousePosition.x - cw;
+    if (fabsf(d_) > cw - 20 ) {
+        NSLog(@"offset %@", NSStringFromCGPoint(offset));
+        float sgn = (d_<0)?-1:1;
+        offset.x = MIN( -(selectedAssetsView.frame.size.width - selectedAssetsView.contentSize.width - SELECTED_THUMBS_GAP) , MAX(-SELECTED_THUMBS_GAP, offset.x + sgn * 10) );
+        selectedAssetsView.contentOffset = offset;
     }
 }
 
@@ -433,13 +471,8 @@
         [model.selectedAssets removeObjectAtIndex:selectedIndex];
 
         // update
-        [self layoutSelectedAssets];
-
-        // scroll to closest to removed one
         thumb = [selectedAssetsThumbnails objectAtIndex:MIN(selectedIndex, selectedCount-2)];
-        CGRect lastFrame = thumb.frame;
-        lastFrame = CGRectOffset(lastFrame, 5, 0);
-        [selectedAssetsView scrollRectToVisible:lastFrame animated:NO];
+        [self layoutSelectedAssetWithOffset:CGPointMake(thumb.frame.origin.x, 0)];
 
 
     } else
@@ -447,7 +480,7 @@
 
         emptySelectionPrompt.hidden = YES;
 
-        CGSize thumbSize = CGSizeMake(75, 75);
+        CGSize thumbSize = CGSizeMake(SELECTED_THUMB_SIZE, SELECTED_THUMB_SIZE);
         
         thumb = [[SelectedAssetView alloc] initWithFrame:CGRectMake(0, 0, thumbSize.width, thumbSize.height) andAsset:asset];
         [selectedAssetsView addSubview:thumb];
@@ -456,12 +489,7 @@
         [model.selectedAssets addObject:url];
 
         // update
-        [self layoutSelectedAssets];
-
-        // scroll to show last element
-        CGRect lastFrame = thumb.frame;
-        lastFrame = CGRectOffset(lastFrame, 5, 0);
-        [selectedAssetsView scrollRectToVisible:lastFrame animated:NO];
+        [self layoutSelectedAssetScrollToLast];
 
     } else {
         //show info
@@ -486,52 +514,33 @@
 
 #pragma mark -- Upadate selected assets view --
 
--(void)updateSelectedAssetsView {
-    int assetsCount = [model.selectedAssets count];
-    
-    emptySelectionPrompt.hidden = (assetsCount>0);
+-(void) layoutSelectedAssetScrollToLast {
+    [self layoutSelectedAssets];
+    float lastItemOffset = selectedAssetsView.contentSize.width - SELECTED_THUMB_SIZE;
+    [selectedAssetsView scrollRectToVisible:CGRectMake(lastItemOffset, 0, SELECTED_THUMB_SIZE, SELECTED_THUMB_SIZE) animated:NO];
+}
 
-    //NSArray *thumbs = selectedAssetsView.subviews;
-
-    CGSize thumbSize = CGSizeMake(75, 75);
-
-    selectedAssetsView.contentSize = CGSizeMake( (thumbSize.width + 4) * assetsCount - 4, thumbSize.height);
-    
-    int index = 0;
-    while ( index < assetsCount ) {
-        ALAsset *asset = [model.selectedAssets objectAtIndex:index];
-        UIImage *thumbImage = [UIImage imageWithCGImage:asset.thumbnail];
-        UIImageView *thumb = [[UIImageView alloc] initWithFrame:CGRectMake( (thumbSize.width + 4) * index , 0, thumbSize.width, thumbSize.height)];
-        thumb.image = thumbImage;
-        [selectedAssetsView addSubview:thumb];
-        index += 1;
-    }
+-(void) layoutSelectedAssetWithOffset:(CGPoint)offset {
+    [self layoutSelectedAssets];
+//    [selectedAssetsView scrollRectToVisible:CGRectMake(offset.x + SELECTED_THUMBS_GAP, offset.y + SELECTED_THUMBS_GAP, 75, 75) animated:NO];
+//    [selectedAssetsView setContentOffset:offset animated:NO];
 }
 
 -(void) layoutSelectedAssets {
-    
-    UIView *thumb = nil;
-    
     int count = [selectedAssetsThumbnails count];
-    
-    
-    NSLog(@"count %d",count);
-
     if(count) {
-        float X = 4;
+        float X = 0;
         int index = 0;
-        
+        UIView *thumb = nil;
         while(index<count) {
             thumb = [selectedAssetsThumbnails objectAtIndex:index];
-            thumb.frame = CGRectMake( X, 4, thumb.bounds.size.width, thumb.bounds.size.height);
-            NSLog(@" %f + %f",X,thumb.frame.size.width);
-            X += 75 + 4;
+            thumb.frame = CGRectMake( X, 0, thumb.bounds.size.width, thumb.bounds.size.height);
+            X += SELECTED_THUMB_SIZE + SELECTED_THUMBS_GAP;
             index += 1;
         }
         
-        selectedAssetsView.contentSize = CGSizeMake( X, thumb.frame.size.height);
+        selectedAssetsView.contentSize = CGSizeMake( X - SELECTED_THUMBS_GAP, thumb.frame.size.height);
     }
-   
 }
 
 -(void)dealloc

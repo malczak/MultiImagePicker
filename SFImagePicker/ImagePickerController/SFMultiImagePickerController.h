@@ -12,6 +12,8 @@
 #import "SFDragIndicator.h"
 
 
+#define SELECTED_THUMB_SIZE 75
+#define SELECTED_THUMBS_GAP 4
 #define REMOVE_DRAGGED_ELEMENT_DIST 40.0f
 
 @interface SFMultiImagePickerController : UIViewController <SFAssetsControllerDelegate> {
@@ -24,6 +26,8 @@
     // gesture recognizers
     UITapGestureRecognizer *tapRecognizer;
     UILongPressGestureRecognizer *pressRecognizer;
+
+    CGPoint mousePosition;
 
     // drag&drop
     SFDragIndicator *dragIndicator;
