@@ -28,6 +28,7 @@
     UILongPressGestureRecognizer *pressRecognizer;
 
     CGPoint mousePosition;
+    NSTimer *autoScrollTimer;
 
     // drag&drop
     SFDragIndicator *dragIndicator;
