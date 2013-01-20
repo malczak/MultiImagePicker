@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2843" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2843" systemVersion="12C3012" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1929"/>
     </dependencies>
@@ -25,19 +25,10 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="mLf-vO-5ET">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="335" id="IWa-wU-aW0"/>
-                                    <constraint firstAttribute="width" constant="230" id="qqW-k4-DKQ"/>
-                                </constraints>
-                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="oaf-P2-qeo" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Inf-dl-tHl"/>
-                            <constraint firstItem="mLf-vO-5ET" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="47" id="TaQ-5g-9wE"/>
-                            <constraint firstItem="mLf-vO-5ET" firstAttribute="top" secondItem="3" secondAttribute="top" constant="109" id="nmZ-U0-SW4"/>
                             <constraint firstItem="oaf-P2-qeo" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="wiX-ue-8WO"/>
                         </constraints>
                     </view>

@@ -103,7 +103,8 @@
     selectedAssetsView.alwaysBounceHorizontal = NO;
     selectedAssetsView.alwaysBounceVertical = NO;
     selectedAssetsView.scrollsToTop = NO;
-    selectedAssetsView.backgroundColor = [UIColor whiteColor];
+//    selectedAssetsView.backgroundColor = [UIColor whiteColor];
+    selectedAssetsView.backgroundColor = [UIColor greenColor];
     [selectedAssetsView addGestureRecognizer:tapRecognizer];
     [selectedAssetsView addGestureRecognizer:pressRecognizer];
     [self.view addSubview:selectedAssetsView];
@@ -194,10 +195,6 @@
 
                 selectedAssetsView.scrollEnabled = YES;
 
-                // update scroll if needed
-                autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleAutoSizeTimer) userInfo:nil repeats:YES];
-                [autoScrollTimer fire];
-
 
             }
         } else
@@ -223,12 +220,18 @@
             mousePosition = [recognizer locationInView:self.view];
 
 
+            // update scroll if needed
+            if(autoScrollTimer == nil) {
+                autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleAutoSizeTimer) userInfo:nil repeats:YES];
+                [autoScrollTimer fire];
+            }
+
+
         } else
         if ( recognizer.state == UIGestureRecognizerStateEnded ) {
             [dragIndicator removeFromSuperview];
 
             selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
-            selectedThumb.dragged = NO;
 
             //check if should be removed / if not calc new index :P
             CGPoint mousePosition = [recognizer locationInView:self.view];
@@ -240,13 +243,18 @@
                 /// update somehow a table view
             } else {
 
+                CGRect dropFrame = [selectedThumb convertRect:selectedThumb.frame toView:self.view];
+
+                [UIView animateWithDuration:1.0 animations:^(){
+                    dragIndicator.frame = dropFrame;
+                } completion:^(BOOL done){
+                    SelectedAssetView *thumb= (SelectedAssetView *)dragIndicator.relatedData;
+                    thumb.dragged = NO;
+                    dragIndicator.image = nil;
+                    dragIndicator.relatedData = nil;
+                }];
+
             }
-
-            selectedAssetsView.contentOffset = CGPointMake(10, 0);
-
-
-            dragIndicator.image = nil;
-            dragIndicator.relatedData = nil;
 
             if(autoScrollTimer) {
                 [autoScrollTimer invalidate];
@@ -260,19 +268,37 @@
 }
 
 -(void) handleAutoSizeTimer {
+    NSLog(@"autoScroll timer fired");
+
     if (CGPointEqualToPoint(mousePosition, CGPointZero)){
         return;
     }
+    
+    if(selectedAssetsView.contentSize.width > selectedAssetsView.frame.size.width) {
+    
 
     CGPoint offset = selectedAssetsView.contentOffset;
     float cw = self.view.frame.size.width * 0.5;
     float d_ = mousePosition.x - cw;
-    if (fabsf(d_) > cw - 20 ) {
-        NSLog(@"offset %@", NSStringFromCGPoint(offset));
+    if (fabsf(d_) > cw - 40 ) {
+
+//        float f = ( (cw-fabsf(d_))/40.0 - 1.0);
+//        f = f * f * f + 1;
+
+        float scrollDelta = 10;//*f;
+//        NSLog(@"offset %@ and ease %f", NSStringFromCGPoint(offset), f);
+
+        float minOffset = -(selectedAssetsView.frame.size.width - selectedAssetsView.contentSize.width - SELECTED_THUMBS_GAP);
+        float maxOffset = -SELECTED_THUMBS_GAP;
+
         float sgn = (d_<0)?-1:1;
-        offset.x = MIN( -(selectedAssetsView.frame.size.width - selectedAssetsView.contentSize.width - SELECTED_THUMBS_GAP) , MAX(-SELECTED_THUMBS_GAP, offset.x + sgn * 10) );
+        offset.x = MIN( minOffset, MAX( maxOffset, offset.x + sgn * scrollDelta) );
+
         selectedAssetsView.contentOffset = offset;
     }
+        
+    }
+
 
     SelectedAssetView *selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
 
@@ -311,8 +337,7 @@
             selectedThumb.frame = dropFrame;
         } completion:^(BOOL done){
             [self layoutSelectedAssets];
-            [self layoutSelectedAssetWithOffset:CGPointMake(dropFrame.origin.x, 0)];
-//                    [self layoutSelectedAssetWithOffset:CGPointMake(dropFrame.origin.x, 0)];
+//            [self layoutSelectedAssetWithOffset:CGPointMake(dropFrame.origin.x, 0)];
         }];
     }
 }
@@ -533,7 +558,7 @@
 
 -(void) layoutSelectedAssetWithOffset:(CGPoint)offset {
     [self layoutSelectedAssets];
-    [selectedAssetsView scrollRectToVisible:CGRectMake(offset.x - SELECTED_THUMBS_GAP, offset.y - SELECTED_THUMBS_GAP, SELECTED_THUMB_SIZE, SELECTED_THUMB_SIZE) animated:NO];
+    [selectedAssetsView scrollRectToVisible:CGRectMake(offset.x - SELECTED_THUMBS_GAP, offset.y, SELECTED_THUMB_SIZE, SELECTED_THUMB_SIZE) animated:NO];
 //    [selectedAssetsView setContentOffset:offset animated:NO];
 }
 
