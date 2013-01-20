@@ -240,6 +240,7 @@
 
             if (distance > REMOVE_DRAGGED_ELEMENT_DIST ) {
                 [self userSelectedAsset:selectedThumb.asset];
+                [model notifyAboutChange];
                 /// update somehow a table view
             } else {
 

@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 segfaultsoft. All rights reserved.
 //
 
-#include "metrics.h"
 #import "SFViewController.h"
 #import "SFMultiImagePickerController.h"
 
@@ -25,15 +24,6 @@
 
     UIScreen *s = [UIScreen mainScreen];
     [s scale];
-
-
-    NSLog(@"15/10cm k %f ", 15.0/10.0);
-    NSLog(@"10cm in points %f ", CMToPixelDpi(10, 72));
-    NSLog(@"15cm in points %f ", CMToPixelDpi(15, 72));
-    NSLog(@"10cm in points %f ", CMToPixelDpi(10, 150));
-    NSLog(@"15cm in points %f ", CMToPixelDpi(15, 150));
-    NSLog(@"10cm in points %f ", CMToPixelDpi(10, 300));
-    NSLog(@"15cm in points %f ", CMToPixelDpi(15, 300));
 
     [showPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
 }

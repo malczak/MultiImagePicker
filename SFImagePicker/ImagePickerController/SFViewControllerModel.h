@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-@interface SFViewControllerModel : NSObject
+#define MODEL_CHANGED @"ModelChanged"
+
+// http://stackoverflow.com/questions/10836463/when-to-use-nsnotificationcenter
+
+@interface SFViewControllerModel : NSNotificationCenter
 
 @property (nonatomic) UInt16 allowedSelectionSize;
 
@@ -26,5 +30,7 @@
 @property (nonatomic, retain) NSMutableArray *selectedAssets;
 
 -(BOOL)isSelectedAsset:(ALAsset *)asset;
+
+-(void)notifyAboutChange;
 
 @end

@@ -59,6 +59,21 @@
     tapLocation = [tapRecognizer locationInView:self.tableView];
 }
 
+-(void)setModel:(SFViewControllerModel *)value {
+    if(self.model) {
+        [self.model removeObserver:self];
+    }
+    model = value;
+    if(self.model) {
+        [self.model addObserver:self selector:@selector(modelHasChanged:) name:MODEL_CHANGED object:nil];
+    }
+}
+
+-(void) modelHasChanged:(NSNotification*)notificationCenter
+{
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

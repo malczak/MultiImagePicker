@@ -40,6 +40,11 @@
     return ( [self.selectedAssets indexOfObject:url] != NSNotFound );
 }
 
+-(void)notifyAboutChange {
+    NSNotification *notification = [NSNotification notificationWithName:MODEL_CHANGED object:nil];
+    [self postNotification:notification];
+}
+
 -(void)dealloc
 {
     [self.assetGroups removeAllObjects];
