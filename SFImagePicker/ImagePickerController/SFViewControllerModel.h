@@ -27,7 +27,13 @@
 
 @property (nonatomic, retain) NSMutableArray *selectedGroupAssets;
 
-@property (nonatomic, retain) NSMutableArray *selectedAssets;
+@property (nonatomic, retain) NSMutableArray *selectedAssetUris;
+
+@property (nonatomic, retain) NSMutableDictionary *selectedAssets;
+
+-(void)selectAsset:(ALAsset*)asset;
+
+-(void)deselectAsset:(ALAsset*)asset;
 
 -(BOOL)isSelectedAsset:(ALAsset *)asset;
 

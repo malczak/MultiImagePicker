@@ -8,6 +8,14 @@
 
 #import "SFViewControllerModel.h"
 
+@interface SFViewControllerModel() {
+    
+}
+
+-(NSString*) getUriForAsset:(ALAsset*)asset;
+
+@end;
+
 @implementation SFViewControllerModel
 
 @synthesize allowedSelectionSize, assetsLibrary, assetGroups, selectedGroup;
@@ -19,7 +27,8 @@
     if(self) {
         self.assetGroups = [[NSMutableArray alloc] init];
         self.selectedGroupAssets = [[NSMutableArray alloc] init];
-        self.selectedAssets = [[NSMutableArray alloc] init];
+        self.selectedAssetUris = [[NSMutableArray alloc] init];
+        self.selectedAssets = [[NSMutableDictionary alloc] init];
         self.allowedSelectionSize = 1;
     }
     return self;
@@ -35,14 +44,37 @@
     // clear instances
 }
 
+-(void)selectAsset:(ALAsset*)asset {
+    NSString *url = [self getUriForAsset:asset];
+    if( [self.selectedAssetUris indexOfObject:url] == NSNotFound ){
+        [self.selectedAssetUris addObject:url];
+        [self.selectedAssets setObject:asset forKey:url];
+    }
+}
+
+-(void)deselectAsset:(ALAsset*)asset {
+    NSString *url = [self getUriForAsset:asset];
+    if( [self.selectedAssetUris indexOfObject:url] != NSNotFound ){
+        [self.selectedAssets removeObjectForKey:url];
+        [self.selectedAssetUris removeObject:url];
+    }
+}
+
 -(BOOL)isSelectedAsset:(ALAsset *)asset {
-    id url = [asset valueForProperty:ALAssetPropertyAssetURL];
-    return ( [self.selectedAssets indexOfObject:url] != NSNotFound );
+    NSURL *url_ = [asset valueForProperty:ALAssetPropertyAssetURL];
+    NSString *url = url_.absoluteString;
+    return ( [self.selectedAssetUris indexOfObject:url] != NSNotFound );
 }
 
 -(void)notifyAboutChange {
     NSNotification *notification = [NSNotification notificationWithName:MODEL_CHANGED object:nil];
     [self postNotification:notification];
+}
+
+- (NSString *)getUriForAsset:(ALAsset *)asset {
+    NSURL *url_ = [asset defaultRepresentation].url;
+    NSString *url = url_.absoluteString;
+    return url;
 }
 
 -(void)dealloc
@@ -52,6 +84,9 @@
     
     [self.selectedGroupAssets removeAllObjects];
     self.selectedGroupAssets = nil;
+    
+    [self.selectedAssetUris removeAllObjects];
+    self.selectedAssetUris = nil;
     
     [self.selectedAssets removeAllObjects];
     self.selectedAssets = nil;

@@ -14,7 +14,7 @@
 
 @property (nonatomic, retain) IBOutlet UIButton *showPickerButton;
 
--(void)sfImagePickerContoller:(SFMultiImagePickerController *)imagePicker didFinishWithInfo:(NSArray *)info;
--(void)sfImagePickerContollerDidCancel:(SFMultiImagePickerController *)imagePicker;
+-(void)imagePickerContoller:(SFMultiImagePickerController *)imagePicker didFinishPickingMediaWithInfo:(NSArray *)info;
+-(void)imagePickerContollerDidCancel:(SFMultiImagePickerController *)imagePicker;
 
 @end

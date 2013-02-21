@@ -16,6 +16,16 @@
 #define SELECTED_THUMBS_GAP 4
 #define REMOVE_DRAGGED_ELEMENT_DIST 40.0f
 
+#ifndef SF_FLAGS
+#define SF_FLAGS
+    extern NSString *const SFImagePickerControllerMediaType;       // an NSString (UTI, i.e. kUTTypeImage)
+    extern NSString *const SFImagePickerControllerOriginalImage;   // a UIImage
+    extern NSString *const SFImagePickerControllerFullScreenImage; // a UIImage as returned by ALAssetRepresentation.fullScreenImage
+    extern NSString *const SFImagePickerControllerReferenceURL;    // an NSURL that references an asset in the AssetsLibrary framework
+    extern NSString *const SFImagePickerControllerAsset;           // a ALAsset instance representing a resource
+#endif
+
+
 @interface SFMultiImagePickerController : UIViewController <SFAssetsControllerDelegate> {
     UINavigationController *navigationController;
     UIScrollView *selectedAssetsView;
@@ -37,6 +47,9 @@
 }
 
 @property (nonatomic, retain) id delegate;
+@property (nonatomic, assign) BOOL includeOriginalImages;
+@property (nonatomic, assign) BOOL includeFullScreenImages;
+@property (nonatomic, assign) BOOL includeAsset;
 
 -(void)userSelectedGroup:(ALAssetsGroup *)group;
 
@@ -51,8 +64,9 @@
 
 @protocol SFMultiImagePickerDelegate <NSObject>
 
--(void) sfImagePickerContollerDidCancel:(SFMultiImagePickerController *) imagePicker;
--(void) sfImagePickerContoller:(SFMultiImagePickerController *) imagePicker didFinishWithInfo:(NSArray *)info;
+-(void) imagePickerContollerDidCancel:(SFMultiImagePickerController *) imagePicker;
+-(void) imagePickerContoller:(SFMultiImagePickerController *) imagePicker didFinishPickingMediaWithInfo:(NSArray *)info;
+
 
 @end
 

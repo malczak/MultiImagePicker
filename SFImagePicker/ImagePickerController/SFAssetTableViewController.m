@@ -129,7 +129,8 @@
     if( (assetIndex>=0) && (assetIndex<[self.model.selectedGroupAssets count]) ) {
         ALAsset *asset = [self.model.selectedGroupAssets objectAtIndex:assetIndex];
         [self.delegate userSelectedAsset:asset];
-        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        // we be updated by model notification
+//        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

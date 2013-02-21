@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		31AE18E0E605F8BAEE2E79D2 /* SFDragIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AE18446F23D95A4FB37451 /* SFDragIndicator.m */; };
 		31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AE1BDD1848125634C01C51 /* SelectedAssetView.m */; };
+		321E4EEE16D6589500679C5A /* BusyOverlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 321E4EED16D6589500679C5A /* BusyOverlayerView.xib */; };
+		321E4EF116D6595900679C5A /* SFBusyOverlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 321E4EF016D6595800679C5A /* SFBusyOverlayerView.m */; };
 		3226D696169C4440002DCDD0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3226D695169C4440002DCDD0 /* QuartzCore.framework */; };
 		3226D69B169C637A002DCDD0 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D699169C637A002DCDD0 /* Overlay.png */; };
 		3226D69C169C637A002DCDD0 /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3226D69A169C637A002DCDD0 /* Overlay@2x.png */; };
@@ -37,6 +39,9 @@
 		31AE1A465AC4B6A56136470D /* SelectedAssetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectedAssetView.h; path = ImagePickerController/SelectedAssetView.h; sourceTree = "<group>"; };
 		31AE1BDD1848125634C01C51 /* SelectedAssetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectedAssetView.m; path = ImagePickerController/SelectedAssetView.m; sourceTree = "<group>"; };
 		31AE1DB8AFC6A163406E0E4A /* SFDragIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFDragIndicator.h; sourceTree = "<group>"; };
+		321E4EED16D6589500679C5A /* BusyOverlayerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusyOverlayerView.xib; sourceTree = "<group>"; };
+		321E4EEF16D6595800679C5A /* SFBusyOverlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBusyOverlayerView.h; sourceTree = "<group>"; };
+		321E4EF016D6595800679C5A /* SFBusyOverlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFBusyOverlayerView.m; sourceTree = "<group>"; };
 		3226D695169C4440002DCDD0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3226D699169C637A002DCDD0 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Overlay.png; path = ImagePickerController/Overlay.png; sourceTree = "<group>"; };
 		3226D69A169C637A002DCDD0 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Overlay@2x.png"; path = "ImagePickerController/Overlay@2x.png"; sourceTree = "<group>"; };
@@ -135,6 +140,9 @@
 				32CF9332169B725C0095AD4A /* MainStoryboard_iPad.storyboard */,
 				32CF9335169B725C0095AD4A /* SFViewController.h */,
 				32CF9336169B725C0095AD4A /* SFViewController.m */,
+				321E4EED16D6589500679C5A /* BusyOverlayerView.xib */,
+				321E4EEF16D6595800679C5A /* SFBusyOverlayerView.h */,
+				321E4EF016D6595800679C5A /* SFBusyOverlayerView.m */,
 				32CF931E169B725C0095AD4A /* Supporting Files */,
 			);
 			name = Classes;
@@ -246,6 +254,7 @@
 				32CF9334169B725C0095AD4A /* MainStoryboard_iPad.storyboard in Resources */,
 				3226D69B169C637A002DCDD0 /* Overlay.png in Resources */,
 				3226D69C169C637A002DCDD0 /* Overlay@2x.png in Resources */,
+				321E4EEE16D6589500679C5A /* BusyOverlayerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +275,7 @@
 				3226D69F169C63ED002DCDD0 /* SFAssetTableCell.m in Sources */,
 				31AE1967A45BA923F811383C /* SelectedAssetView.m in Sources */,
 				31AE18E0E605F8BAEE2E79D2 /* SFDragIndicator.m in Sources */,
+				321E4EF116D6595900679C5A /* SFBusyOverlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

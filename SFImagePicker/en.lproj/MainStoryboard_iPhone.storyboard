@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2843" systemVersion="12C3012" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C3012" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1929"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -25,14 +25,28 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDD-B0-uGr"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRf-jN-HIY">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="DDD-B0-uGr" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="40" id="2uy-iZ-q7n"/>
                             <constraint firstItem="oaf-P2-qeo" firstAttribute="top" secondItem="3" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Inf-dl-tHl"/>
+                            <constraint firstItem="DDD-B0-uGr" firstAttribute="top" secondItem="gRf-jN-HIY" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Sec-f2-MXf"/>
+                            <constraint firstItem="gRf-jN-HIY" firstAttribute="top" secondItem="3" secondAttribute="top" constant="78" id="dmd-xc-VyH"/>
+                            <constraint firstAttribute="bottom" secondItem="DDD-B0-uGr" secondAttribute="bottom" constant="101" id="gnS-3U-O8P"/>
+                            <constraint firstItem="gRf-jN-HIY" firstAttribute="centerX" secondItem="DDD-B0-uGr" secondAttribute="centerX" type="default" id="kz2-M8-OMq"/>
+                            <constraint firstItem="gRf-jN-HIY" firstAttribute="centerX" secondItem="oaf-P2-qeo" secondAttribute="centerX" type="default" id="muy-wR-qCq"/>
                             <constraint firstItem="oaf-P2-qeo" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="wiX-ue-8WO"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="imageScrollView" destination="DDD-B0-uGr" id="Hg7-QB-aBr"/>
+                        <outlet property="label" destination="gRf-jN-HIY" id="HMT-Ba-sRW"/>
                         <outlet property="showPickerButton" destination="oaf-P2-qeo" id="Uyl-BQ-MX6"/>
                     </connections>
                 </viewController>
@@ -47,6 +61,8 @@
         <class className="SFViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SFViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="imageScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="showPickerButton" candidateClass="UIButton"/>
             </relationships>
         </class>

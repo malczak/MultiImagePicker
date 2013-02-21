@@ -5,7 +5,7 @@
 //  Created by malczak on 1/7/13.
 //  Copyright (c) 2013 segfaultsoft. All rights reserved.
 //
-
+#import <mach/mach_time.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -17,6 +17,10 @@
 
 /**
  
+ get UIImage from ALAsset
+ http://biasedbit.com/alasset-image-orientation/
+ 
+ NavigationController related
  http://stackoverflow.com/questions/2962162/non-fullscreen-uinavigationcontroller
  http://stackoverflow.com/questions/2526990/adding-a-uinavigationcontroller-as-a-subview-of-uiview
  
@@ -30,17 +34,29 @@
  
  */
 
+NSString *const SFImagePickerControllerMediaType = @"sfImagePickerControllerMediaType";
+NSString *const SFImagePickerControllerOriginalImage = @"sfImagePickerControllerOriginalImage";
+NSString *const SFImagePickerControllerFullScreenImage = @"sfImagePickerControllerFullScreenImage";
+NSString *const SFImagePickerControllerReferenceURL = @"sfImagePickerControllerReferenceURL";    
+NSString *const SFImagePickerControllerAsset = @"sfImagePickerControllerAsset";
+
 @interface SFMultiImagePickerController ()
+
+-(NSDictionary*)imageInfoDictionaryForAsset:(ALAsset *)asset;
 
 @end
 
 @implementation SFMultiImagePickerController
 
-@synthesize delegate;
+@synthesize delegate, includeFullScreenImages, includeOriginalImages, includeAsset;
 
 -(id) init {
     self = [super init];
     if(self) {
+        self.includeOriginalImages = NO;
+        self.includeFullScreenImages = NO;
+        self.includeAsset = YES;
+        
         model = [[SFViewControllerModel alloc] init];
         selectedAssetsThumbnails = [[NSMutableArray alloc] init];
 
@@ -103,8 +119,7 @@
     selectedAssetsView.alwaysBounceHorizontal = NO;
     selectedAssetsView.alwaysBounceVertical = NO;
     selectedAssetsView.scrollsToTop = NO;
-//    selectedAssetsView.backgroundColor = [UIColor whiteColor];
-    selectedAssetsView.backgroundColor = [UIColor greenColor];
+    selectedAssetsView.backgroundColor = [UIColor whiteColor];
     [selectedAssetsView addGestureRecognizer:tapRecognizer];
     [selectedAssetsView addGestureRecognizer:pressRecognizer];
     [self.view addSubview:selectedAssetsView];
@@ -163,11 +178,16 @@
 }
 
 - (void)handleGestureLongPress:(UITapGestureRecognizer *)recognizer {
+    
     if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
 
         SelectedAssetView *selectedThumb;
 
         if ( recognizer.state == UIGestureRecognizerStateBegan ) {
+            
+            if( [model.selectedAssetUris count]<2 ) {
+                return;
+            }
 
             selectedThumb = [self viewFromRecognizer:recognizer];
             if (selectedThumb) {
@@ -180,11 +200,11 @@
                 UIImage *dragIndicatorImage = [UIImage imageWithCGImage:selectedThumb.asset.thumbnail];
 
                 CGRect frame = [recognizer.view convertRect:selectedThumb.frame toView:self.view];
-                CGPoint mousePosition = [recognizer locationInView:self.view];
+                CGPoint mPos = [recognizer locationInView:self.view];
                 float dx = frame.size.width - 5;
                 float dy = frame.size.height - 5;
-                frame.origin.x = mousePosition.x - dx;
-                frame.origin.y = mousePosition.y - dy;
+                frame.origin.x = mPos.x - dx;
+                frame.origin.y = mPos.y - dy;
 
                 dragIndicator.image = dragIndicatorImage;
                 dragIndicator.relatedData = selectedThumb;
@@ -199,6 +219,11 @@
             }
         } else
         if ( recognizer.state == UIGestureRecognizerStateChanged ) {
+            
+            selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
+            if(nil==selectedThumb) {
+                return;
+            }
 
             CGRect frame = dragIndicator.frame;
 
@@ -222,28 +247,30 @@
 
             // update scroll if needed
             if(autoScrollTimer == nil) {
-                autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(handleAutoSizeTimer) userInfo:nil repeats:YES];
+                autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(handleAutoSizeTimer) userInfo:nil repeats:YES];
                 [autoScrollTimer fire];
             }
 
 
         } else
         if ( recognizer.state == UIGestureRecognizerStateEnded ) {
+            
+            selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
+            if(nil==selectedThumb) {
+                return;
+            }
+
             [dragIndicator removeFromSuperview];
 
-            selectedThumb = (SelectedAssetView *)dragIndicator.relatedData;
-
             //check if should be removed / if not calc new index :P
-            CGPoint mousePosition = [recognizer locationInView:self.view];
+            CGPoint mPos = [recognizer locationInView:self.view];
             CGRect selectedViewFrame = selectedAssetsView.frame;
-            float distance = ( selectedViewFrame.origin.y - mousePosition.y );
+            float distance = ( selectedViewFrame.origin.y - mPos.y );
 
             if (distance > REMOVE_DRAGGED_ELEMENT_DIST ) {
                 [self userSelectedAsset:selectedThumb.asset];
-                [model notifyAboutChange];
                 /// update somehow a table view
             } else {
-
                 CGRect dropFrame = [selectedThumb convertRect:selectedThumb.frame toView:self.view];
 
                 [UIView animateWithDuration:1.0 animations:^(){
@@ -405,36 +432,81 @@
 #pragma mark -- Delegate user decisions --
 -(void) cancelImagePicker
 {
-    if( [self.delegate respondsToSelector:@selector(sfImagePickerContollerDidCancel:)] ) {
-        [self.delegate performSelector:@selector(sfImagePickerContollerDidCancel:) withObject:self];
+    if( [self.delegate respondsToSelector:@selector(imagePickerContollerDidCancel:)] ) {
+        [self.delegate performSelector:@selector(imagePickerContollerDidCancel:) withObject:self];
     }
 }
 
 -(void) acceptImagePicker
 {
-    if( [self.delegate respondsToSelector:@selector(sfImagePickerContoller:didFinishWithInfo:)] ) {
+    if( [self.delegate respondsToSelector:@selector(imagePickerContoller:didFinishPickingMediaWithInfo:)] ) {
+
+        
+        NSDate *d = [NSDate date];
 
         // selected assets NSURL's
-        NSArray* info = [NSArray arrayWithArray:model.selectedAssets];
-/*
-        NSMutableArray *returnArray = [[[NSMutableArray alloc] init] autorelease];
+        int numSelected = model.selectedAssetUris.count;
         
-        for(ALAsset *asset in model.sele) {
-            
-            NSMutableDictionary *workingDictionary = [[NSMutableDictionary alloc] init];
-            [workingDictionary setObject:[asset valueForProperty:ALAssetPropertyType] forKey:@"UIImagePickerControllerMediaType"];
-            [workingDictionary setObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]] forKey:@"UIImagePickerControllerOriginalImage"];
-            [workingDictionary setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:@"UIImagePickerControllerReferenceURL"];
-            
-            [returnArray addObject:workingDictionary];
-            
-            [workingDictionary release];
+        NSMutableArray *assetsInfos = [[NSMutableArray alloc] init];
+        int assetIndex = 0;
+        while(assetIndex < numSelected) {
+            NSString *assetUrl = [model.selectedAssetUris objectAtIndex:assetIndex];
+            ALAsset *asset = [model.selectedAssets objectForKey:assetUrl];
+            if(asset!=nil) {
+                NSDictionary *info = [self imageInfoDictionaryForAsset:asset];
+                if(info!=nil) {
+                    [assetsInfos addObject:info];
+                }
+            }
+            assetIndex += 1;
         }
- */
         
+        NSTimeInterval T = [d timeIntervalSinceNow];
         
-        [self.delegate performSelector:@selector(sfImagePickerContoller:didFinishWithInfo:) withObject:self withObject:[NSArray arrayWithObject:info]];
+        NSLog(@"prepare data %f", T);
+        [self.delegate performSelector:@selector(imagePickerContoller:didFinishPickingMediaWithInfo:) withObject:self withObject:assetsInfos];
     }
+}
+
+-(NSDictionary*)imageInfoDictionaryForAsset:(ALAsset *)asset
+{    
+    assert(asset);
+
+    ALAssetRepresentation* representation = [asset defaultRepresentation];
+        
+    UIImage* originalImage = nil;
+    UIImage *fullScreenImage = nil;
+    
+    NSMutableDictionary *info = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                          [asset valueForProperty:ALAssetPropertyType], SFImagePickerControllerMediaType,
+                          representation.url, SFImagePickerControllerReferenceURL,
+                          nil];
+    
+    if(self.includeAsset) {
+        [info setObject:asset forKey:SFImagePickerControllerAsset];
+    }
+    
+    if(self.includeOriginalImages) {
+        // Retrieve the image orientation from the ALAsset
+        UIImageOrientation orientation = UIImageOrientationUp;
+        NSNumber* orientationValue = [asset valueForProperty:ALAssetPropertyOrientation];
+        if (orientationValue != nil) {
+            orientation = [orientationValue intValue];
+        }
+        
+        CGFloat scale  = representation.scale;
+        originalImage = [UIImage imageWithCGImage:[representation fullResolutionImage] scale:scale orientation:orientation];
+        
+        [info setObject:originalImage forKey:SFImagePickerControllerOriginalImage];
+    }
+
+    if(self.includeFullScreenImages) {
+        fullScreenImage = [UIImage imageWithCGImage:representation.fullScreenImage];
+        
+        [info setObject:fullScreenImage forKey:SFImagePickerControllerFullScreenImage];
+    }
+
+    return info;
 }
 
 
@@ -491,11 +563,9 @@
         return;
     }
 
-    NSUInteger selectedCount = [model.selectedAssets count];
-
+    NSUInteger selectedCount = [model.selectedAssetUris count];
 
     SelectedAssetView *thumb = [self assetThumbnailFromAsset:asset];
-    id url = [asset valueForProperty:ALAssetPropertyAssetURL];
 
     // if selected deselect
     if( nil != thumb ) {
@@ -505,11 +575,13 @@
         [selectedAssetsThumbnails removeObjectAtIndex:selectedIndex];
         //remove
             
-        [model.selectedAssets removeObjectAtIndex:selectedIndex];
+        [model deselectAsset:asset];
 
         // update
         thumb = [selectedAssetsThumbnails objectAtIndex:MIN(selectedIndex, selectedCount-2)];
         [self layoutSelectedAssetWithOffset:CGPointMake(thumb.frame.origin.x, 0)];
+
+        [model notifyAboutChange];
 
 
     } else
@@ -523,10 +595,13 @@
         [selectedAssetsView addSubview:thumb];
         [selectedAssetsThumbnails addObject:thumb];
 
-        [model.selectedAssets addObject:url];
+        [model selectAsset:asset];
 
         // update
         [self layoutSelectedAssetScrollToLast];
+        
+        [model notifyAboutChange];
+
 
     } else {
         //show info
